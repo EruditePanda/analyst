@@ -1,4 +1,5 @@
 require('dotenv').config();
+let request = require('request');
 let Twitter = require('twitter');
 let _ = require('lodash');
 let settings = require('./settings.json');
@@ -35,10 +36,30 @@ const isTweet = _.conforms({
   text: _.isString,
 });
 
+function saveTweetAsync(tweet) {
+  request({
+    uri: settings.elasticSearchAddress,
+    method: "POST",
+    timeout: 10000,
+    followRedirect: false,
+    maxRedirects: 10,
+    json: {}
+  }, function(error, response, body) {
+    if (error) {
+      console.error(error);
+    } else if (response.statusCode >= 400) {
+      console.error(`Can't save tweet - ${response.statusCode}`);
+    } else {
+      console.log('tweet saved');
+    }
+  });
+}
+
 var stream = client.stream('statuses/filter', {track: settings.twitterTrack});
 stream.on('data', function(event) {
   if (isTweet(event)){
-    console.log(toStoredTweet(event));
+    const storedTweet = toStoredTweet(event);
+    saveTweetAsync(storedTweet);
   }
 });
 

@@ -1,3 +1,4 @@
 {
-  "twitterTrack": "golang, haskell, jvm, elasticsearch"
+  "twitterTrack": "golang, haskell, jvm, elasticsearch",
+  "elasticSearchAddress": "http://localhost:9200"
 }
