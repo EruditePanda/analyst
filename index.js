@@ -1,6 +1,7 @@
 require('dotenv').config();
 let Twitter = require('twitter');
 let _ = require('lodash');
+let settings = require('./settings.json');
 
 console.log('starting data-stream');
 
@@ -30,7 +31,7 @@ const isTweet = _.conforms({
   text: _.isString,
 });
 
-var stream = client.stream('statuses/filter', {track: 'Putin Trump, Japan'});
+var stream = client.stream('statuses/filter', {track: settings.twitterTrack});
 stream.on('data', function(event) {
   if (isTweet(event)){
     console.log(toStoredTweet(event));
