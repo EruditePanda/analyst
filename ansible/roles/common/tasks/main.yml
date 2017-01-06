@@ -1,0 +1,9 @@
+- name: install htop
+  become: True
+  become_method: "sudo"
+  apt: name=htop
+
+- name: install httpie
+  become: True
+  become_method: "sudo"
+  apt: name=httpie

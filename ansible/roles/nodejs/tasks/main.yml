@@ -1,0 +1,9 @@
+- name: preparing to install nodejs
+  become: True
+  become_method: "sudo"
+  shell: curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+
+- name: install nodejs
+  become: True
+  become_method: "sudo"
+  apt: name=nodejs state=present

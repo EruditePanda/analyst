@@ -1,0 +1,7 @@
+- name: web server configuration
+  hosts: webservers
+  roles:
+    - role: common
+    - role: java
+    - role: elasticsearch
+    - role: nodejs

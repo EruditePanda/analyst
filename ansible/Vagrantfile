@@ -1,0 +1,21 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure("2") do |config|
+  config.vm.define "analyst" do |machine|
+    machine.vm.box = "ubuntu/xenial64"
+    machine.vm.hostname = "analyst"
+    machine.vm.network :private_network, ip: "10.0.0.20"
+    machine.vm.network :forwarded_port, guest: 22, host: 5121
+
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "analyst.yml"
+      ansible.inventory_path = "hosts"
+    end
+
+    machine.vm.provider "virtualbox" do |v|
+      v.name = "analyst"
+      v.memory = 4096
+      v.cpus = 2
+    end
+  end
+end

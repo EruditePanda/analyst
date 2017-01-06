@@ -1,0 +1,2 @@
+#make sure you use your _private_ ip here
+network.host: 10.0.0.20

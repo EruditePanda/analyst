@@ -1,0 +1,27 @@
+- name: Download ElasticSearch package
+  get_url: url=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.1.deb dest=/home/ubuntu/elasticsearch-5.1.1.deb
+
+- name: Install ElasticSearch
+  become: True
+  become_method: "sudo"
+  shell: dpkg -i /home/ubuntu/elasticsearch-5.1.1.deb
+
+- name: copy settings to /etc/elasticsearch/elasticsearch.yml
+  become: True
+  become_method: "sudo"
+  copy: src=./files/elasticsearch.yml dest=/etc/elasticsearch/elasticsearch.yml
+  
+- name: reload systemctl
+  become: True
+  become_method: "sudo"
+  command: systemctl daemon-reload
+
+- name: make sure ElasticSearch is enabled
+  become: True
+  become_method: "sudo"
+  service: name=elasticsearch.service enabled=yes
+
+- name: make sure ElasticSearch is restarted
+  become: True
+  become_method: "sudo"
+  service: name=elasticsearch.service state=restarted
