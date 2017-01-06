@@ -9,6 +9,8 @@
   "author": "abtv",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^2.0.0",
+    "lodash": "^4.17.4",
     "twitter": "^1.7.0"
   }
 }
