@@ -14,10 +14,14 @@ let client = new Twitter({
 
 console.log(client);
 
+function twitterDateToJSDate(aDate){
+  return new Date(Date.parse(aDate.replace(/( \+)/, ' UTC$1')));
+}
+
 function toStoredTweet(tweet){
   return {
     id: tweet.id.toString(),
-    created_at: tweet.created_at,
+    created_at: twitterDateToJSDate(tweet.created_at),
     text: tweet.text,
     lang: tweet.lang,
     userId: _.get(tweet, 'user.id', null),
