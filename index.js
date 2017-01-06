@@ -1,10 +1,14 @@
-require('dotenv').config();
 let request = require('request');
 let Twitter = require('twitter');
 let _ = require('lodash');
 let settings = require('./settings.json');
+let Log = require('log');
+let fs = require('fs');
 
-console.log('starting data-stream');
+require('dotenv').config();
+let log = new Log('info', fs.createWriteStream(settings.logFileName));
+
+log.info('Starting data-stream');
 
 let client = new Twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -13,7 +17,7 @@ let client = new Twitter({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
-console.log(client);
+log.info('Twitter client was created');
 
 function twitterDateToJSDate(aDate){
   return new Date(Date.parse(aDate.replace(/( \+)/, ' UTC$1')));
@@ -46,11 +50,11 @@ function saveTweetAsync(tweet) {
     json: {}
   }, function(error, response, body) {
     if (error) {
-      console.error(error);
+      log.error(error);
     } else if (response.statusCode >= 400) {
-      console.error(`Can't save tweet - ${response.statusCode}`);
+      log.error(`Can't save tweet - ${response.statusCode}`);
     } else {
-      console.log('tweet saved');
+      log.info('tweet saved');
     }
   });
 }
@@ -64,5 +68,5 @@ stream.on('data', function(event) {
 });
 
 stream.on('error', function(error) {
-  console.error(error);
+  log.error(error);
 });

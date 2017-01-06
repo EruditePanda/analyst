@@ -1,4 +1,5 @@
 {
+  "logFileName": "data-stream.log",
   "twitterTrack": "golang, haskell, jvm, elasticsearch",
   "elasticSearchAddress": "http://localhost:9200"
 }
