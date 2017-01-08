@@ -48,18 +48,22 @@ const isTweet = _.conforms({
 });
 
 function saveTweetAsync(tweet) {
+  var uri = settings.elasticSearchAddress;
+  if (!uri.endsWith("/")){
+    uri += "/";
+  }
   request({
-    uri: settings.elasticSearchAddress,
-    method: "POST",
+    uri: uri + "tweets/tweet/" + tweet.id,
+    method: "PUT",
     timeout: 10000,
     followRedirect: false,
     maxRedirects: 10,
-    json: {}
+    json: tweet
   }, function(error, response, body) {
     if (error) {
       log.error(error);
     } else if (response.statusCode >= 400) {
-      log.error(`Can't save tweet - ${response.statusCode}`);
+      log.error(`Can't save tweet - ${response.statusCode}: ${body}`);
     } else {
       log.info('tweet saved');
     }
@@ -70,8 +74,7 @@ var stream = client.stream('statuses/filter', {track: settings.twitterTrack});
 stream.on('data', function(event) {
   if (isTweet(event)){
     const storedTweet = toStoredTweet(event);
-    log.info(event);
-    //saveTweetAsync(storedTweet);
+    saveTweetAsync(storedTweet);
   }
 });
 

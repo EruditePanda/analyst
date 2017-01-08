@@ -3,6 +3,6 @@
   roles:
 #    - role: common
 #    - role: java
-    - role: elasticsearch
+#    - role: elasticsearch
 #    - role: nodejs
     - role: app
