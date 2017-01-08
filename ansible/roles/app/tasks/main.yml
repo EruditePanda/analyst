@@ -1,0 +1,28 @@
+- name: copy index.js
+  copy: src=../data-stream/index.js dest=/home/ubuntu/index.js
+
+- name: copy settings.json
+  copy: src=../data-stream/settings.json dest=/home/ubuntu/settings.json
+
+- name: copy node_modules
+  copy: src=../data-stream/node_modules dest=/home/ubuntu/node_modules
+
+#- name: copy app.service
+#  become: True
+#  become_method: "sudo"
+#  copy: src=./files/app.service dest=/etc/systemd/system/app.service
+
+#- name: reload systemctl
+#  become: True
+#  become_method: "sudo"
+#  command: systemctl daemon-reload
+
+#- name: enable app.service
+#  become: True
+#  become_method: "sudo"
+#  service: name=app.service enabled=yes
+
+#- name: restart app.service
+#  become: True
+#  become_method: "sudo"
+#  service: name=app.service state=restarted

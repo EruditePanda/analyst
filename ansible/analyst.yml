@@ -5,3 +5,4 @@
     - role: java
     - role: elasticsearch
     - role: nodejs
+    - role: app
