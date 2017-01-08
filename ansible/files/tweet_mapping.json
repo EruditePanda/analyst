@@ -1,0 +1,15 @@
+{
+  "properties": {
+    "id": { "type": "text",
+            "index": "not_analyzed" },
+    "createdAt": { "type": "date" },
+    "text": { "type": "text" },
+    "userName": { "type": "text" },
+    "userScreenName": { "type": "text" },
+    "userDescription": { "type": "text" },
+    "userLocation": { "type": "text" },
+    "followersCount": { "type": "integer" },
+    "friendsCount": { "type": "integer" },
+    "statusesCount": { "type": "integer" }
+  }
+}

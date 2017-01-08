@@ -33,7 +33,12 @@ function toStoredTweet(tweet){
     lang: tweet.lang,
     userId: _.get(tweet, 'user.id', null),
     userName: _.get(tweet, 'user.name', null),
-    userLocation: _.get(tweet, 'user.location', null)
+    userScreenName: _.get(tweet, 'user.screen_name', null),
+    userDescription: _.get(tweet, 'user.description', null),
+    userLocation: _.get(tweet, 'user.location', null),
+    followersCount: _.get(tweet, 'user.followers_count', null),
+    friendsCount: _.get(tweet, 'user.friends_count', null),
+    statusesCount: _.get(tweet, 'user.statuses_count', null)
   };
 }
 
@@ -65,7 +70,8 @@ var stream = client.stream('statuses/filter', {track: settings.twitterTrack});
 stream.on('data', function(event) {
   if (isTweet(event)){
     const storedTweet = toStoredTweet(event);
-    saveTweetAsync(storedTweet);
+    log.info(event);
+    //saveTweetAsync(storedTweet);
   }
 });
 

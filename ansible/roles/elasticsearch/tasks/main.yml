@@ -10,7 +10,7 @@
   become: True
   become_method: "sudo"
   copy: src=./files/elasticsearch.yml dest=/etc/elasticsearch/elasticsearch.yml
-  
+
 - name: reload systemctl
   become: True
   become_method: "sudo"
@@ -25,3 +25,20 @@
   become: True
   become_method: "sudo"
   service: name=elasticsearch.service state=restarted
+
+- name: waiting for ElasticSearch
+  wait_for:
+    port: 9200
+    delay: 5
+
+- name: copy elasticsearch_indices.sh (can not use python3 yet for uri module)
+  copy: src=./files/elasticsearch_indices.sh dest=/home/ubuntu/elasticsearch_indices.sh
+
+- name: copy tweets_index.json
+  copy: src=./files/tweets_index.json dest=/home/ubuntu/tweets_index.json
+
+- name: copy tweet_mapping.json
+  copy: src=./files/tweet_mapping.json dest=/home/ubuntu/tweet_mapping.json
+
+- name: create ElasticSearch indices
+  command: /bin/sh /home/ubuntu/elasticsearch_indices.sh
