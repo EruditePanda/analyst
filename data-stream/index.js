@@ -1,3 +1,5 @@
+"use strict";
+
 let request = require('request');
 let Twitter = require('twitter');
 let _ = require('lodash');
