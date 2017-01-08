@@ -1,0 +1,10 @@
+[Unit]
+Description=data-stream app
+
+[Service]
+User=root
+WorkingDirectory=/home/ubuntu/
+ExecStart=/usr/bin/node /home/ubuntu/index.js
+
+[Install]
+WantedBy=multi-user.target

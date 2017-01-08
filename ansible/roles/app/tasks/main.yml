@@ -13,22 +13,22 @@
 - name: install node modules
   command: npm install
 
-#- name: copy app.service
-#  become: True
-#  become_method: "sudo"
-#  copy: src=./files/app.service dest=/etc/systemd/system/app.service
+- name: copy data_stream.service
+  become: True
+  become_method: "sudo"
+  copy: src=./files/data_stream.service dest=/etc/systemd/system/data_stream.service
 
-#- name: reload systemctl
-#  become: True
-#  become_method: "sudo"
-#  command: systemctl daemon-reload
+- name: reload systemctl
+  become: True
+  become_method: "sudo"
+  command: systemctl daemon-reload
 
-#- name: enable app.service
-#  become: True
-#  become_method: "sudo"
-#  service: name=app.service enabled=yes
+- name: enable data_stream.service
+  become: True
+  become_method: "sudo"
+  service: name=data_stream.service enabled=yes
 
-#- name: restart app.service
-#  become: True
-#  become_method: "sudo"
-#  service: name=app.service state=restarted
+- name: restart data_stream.service
+  become: True
+  become_method: "sudo"
+  service: name=data_stream.service state=restarted
