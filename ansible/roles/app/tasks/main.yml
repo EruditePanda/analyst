@@ -1,11 +1,17 @@
+- name: copy package.json
+  copy: src=../data-stream/package.json dest=/home/ubuntu/
+
 - name: copy index.js
-  copy: src=../data-stream/index.js dest=/home/ubuntu/index.js
+  copy: src=../data-stream/index.js dest=/home/ubuntu/
 
 - name: copy settings.json
-  copy: src=../data-stream/settings.json dest=/home/ubuntu/settings.json
+  copy: src=../data-stream/settings.json dest=/home/ubuntu/
 
-- name: copy node_modules
-  copy: src=../data-stream/node_modules dest=/home/ubuntu/node_modules
+- name: copy .env
+  copy: src=../data-stream/.env dest=/home/ubuntu/
+
+- name: install node modules
+  command: npm install
 
 #- name: copy app.service
 #  become: True
