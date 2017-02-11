@@ -5,6 +5,8 @@ Description=data-stream app
 User=root
 WorkingDirectory=/home/ubuntu/
 ExecStart=/usr/bin/node /home/ubuntu/index.js
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
