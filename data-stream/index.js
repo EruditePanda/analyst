@@ -1,28 +1,28 @@
-"use strict";
+"use strict"
 
-let request = require('request');
-let Twitter = require('twitter');
-let _ = require('lodash');
-let settings = require('./settings.json');
-let Log = require('log');
-let fs = require('fs');
+const request = require('request')
+const Twitter = require('twitter')
+const _ = require('lodash')
+const  settings = require('./settings.json')
+const Log = require('log')
+const fs = require('fs')
 
-require('dotenv').config();
-let log = new Log('info', fs.createWriteStream(settings.logFileName));
+require('dotenv').config()
+const log = new Log('info', fs.createWriteStream(settings.logFileName))
 
-log.info('Starting data-stream');
+log.info('Starting data-stream')
 
-let client = new Twitter({
+const client = new Twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
   access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-});
+})
 
-log.info('Twitter client was created');
+log.info('Twitter client was created')
 
 function twitterDateToJSDate(aDate){
-  return new Date(Date.parse(aDate.replace(/( \+)/, ' UTC$1')));
+  return new Date(Date.parse(aDate.replace(/( \+)/, ' UTC$1')))
 }
 
 function toStoredTweet(tweet){
@@ -39,18 +39,18 @@ function toStoredTweet(tweet){
     followersCount: _.get(tweet, 'user.followers_count', null),
     friendsCount: _.get(tweet, 'user.friends_count', null),
     statusesCount: _.get(tweet, 'user.statuses_count', null)
-  };
+  }
 }
 
 const isTweet = _.conforms({
   id_str: _.isString,
   text: _.isString,
-});
+})
 
 function saveTweetAsync(tweet) {
-  var uri = settings.elasticSearchAddress;
+  let uri = settings.elasticSearchAddress
   if (!uri.endsWith("/")){
-    uri += "/";
+    uri += "/"
   }
   request({
     uri: uri + "tweets/tweet/" + tweet.id,
@@ -59,25 +59,25 @@ function saveTweetAsync(tweet) {
     followRedirect: false,
     maxRedirects: 10,
     json: tweet
-  }, function(error, response, body) {
+  }, (error, response, body) => {
     if (error) {
-      log.error(error);
+      log.error(error)
     } else if (response.statusCode >= 400) {
-      log.error(`Can't save tweet - ${response.statusCode}: ${body}`);
+      log.error(`Can't save tweet - ${response.statusCode}: ${body}`)
     } else {
-      log.info('tweet saved');
+      log.info('tweet saved')
     }
-  });
+  })
 }
 
-var stream = client.stream('statuses/filter', {track: settings.twitterTrack});
-stream.on('data', function(event) {
+const stream = client.stream('statuses/filter', {track: settings.twitterTrack})
+stream.on('data', event => {
   if (isTweet(event)){
-    const storedTweet = toStoredTweet(event);
-    saveTweetAsync(storedTweet);
+    const storedTweet = toStoredTweet(event)
+    saveTweetAsync(storedTweet)
   }
-});
+})
 
-stream.on('error', function(error) {
-  log.error(error);
-});
+stream.on('error', error => {
+  log.error(error)
+})
