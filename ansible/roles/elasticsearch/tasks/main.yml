@@ -1,15 +1,20 @@
 - name: Download ElasticSearch package
-  get_url: url=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.1.deb dest=/home/ubuntu/elasticsearch-5.1.1.deb
+  get_url: url=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.1.deb dest=/tmp/elasticsearch-5.1.1.deb
 
 - name: Install ElasticSearch
   become: True
   become_method: "sudo"
-  shell: dpkg -i /home/ubuntu/elasticsearch-5.1.1.deb
+  shell: dpkg -i /tmp/elasticsearch-5.1.1.deb
 
 - name: copy settings to /etc/elasticsearch/elasticsearch.yml
   become: True
   become_method: "sudo"
   copy: src=./files/elasticsearch.yml dest=/etc/elasticsearch/elasticsearch.yml
+
+- name: copy settings to /etc/default/elasticsearch
+  become: True
+  become_method: "sudo"
+  copy: src=./files/elasticsearch dest=/etc/default/elasticsearch
 
 - name: reload systemctl
   become: True
@@ -32,13 +37,13 @@
     delay: 5
 
 - name: copy elasticsearch_indices.sh (can not use python3 yet for uri module)
-  copy: src=./files/elasticsearch_indices.sh dest=/home/ubuntu/elasticsearch_indices.sh
+  copy: src=./files/elasticsearch_indices.sh dest=/tmp/elasticsearch_indices.sh
 
 - name: copy tweets_index.json
-  copy: src=./files/tweets_index.json dest=/home/ubuntu/tweets_index.json
+  copy: src=./files/tweets_index.json dest=/tmp/tweets_index.json
 
 - name: copy tweet_mapping.json
-  copy: src=./files/tweet_mapping.json dest=/home/ubuntu/tweet_mapping.json
+  copy: src=./files/tweet_mapping.json dest=/tmp/tweet_mapping.json
 
 - name: create ElasticSearch indices
-  command: /bin/sh /home/ubuntu/elasticsearch_indices.sh
+  command: /bin/sh /tmp/elasticsearch_indices.sh

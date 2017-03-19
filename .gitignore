@@ -4,3 +4,4 @@ data-stream.log
 .vagrant
 *.log
 *.retry
+production

@@ -1,5 +1,5 @@
 {
   "logFileName": "data-stream.log",
-  "twitterTrack": "elasticsearch, rabbitmq, docker",
+  "twitterTrack": "elasticsearch, rabbitmq, docker, mongodb, clojure, clojurescript",
   "elasticSearchAddress": "http://localhost:9200"
 }

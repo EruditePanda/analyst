@@ -3,8 +3,8 @@ Description=data-stream app
 
 [Service]
 User=root
-WorkingDirectory=/home/ubuntu/
-ExecStart=/usr/bin/node /home/ubuntu/index.js
+WorkingDirectory=/opt/data_stream/
+ExecStart=/usr/bin/node /opt/data_stream/index.js
 Restart=always
 RestartSec=5
 

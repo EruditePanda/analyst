@@ -1,17 +1,27 @@
 - name: copy package.json
-  copy: src=../data-stream/package.json dest=/home/ubuntu/
+  become: True
+  become_method: "sudo"
+  copy: src=../data-stream/package.json dest=/opt/data_stream/
 
 - name: copy index.js
-  copy: src=../data-stream/index.js dest=/home/ubuntu/
+  become: True
+  become_method: "sudo"
+  copy: src=../data-stream/index.js dest=/opt/data_stream/
 
 - name: copy settings.json
-  copy: src=../data-stream/settings.json dest=/home/ubuntu/
+  become: True
+  become_method: "sudo"
+  copy: src=../data-stream/settings.json dest=/opt/data_stream/
 
 - name: copy .env
-  copy: src=../data-stream/.env dest=/home/ubuntu/
+  become: True
+  become_method: "sudo"
+  copy: src=../data-stream/.env dest=/opt/data_stream/
 
 - name: install node modules
-  command: npm install
+  become: True
+  become_method: "sudo"
+  command: npm install --prefix /opt/data_stream
 
 - name: copy data_stream.service
   become: True
