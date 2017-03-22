@@ -11,10 +11,10 @@
   become_method: "sudo"
   copy: src=./files/elasticsearch.yml dest=/etc/elasticsearch/elasticsearch.yml
 
-- name: copy settings to /etc/default/elasticsearch
+- name: copy jvm.options to /etc/elasticsearch
   become: True
   become_method: "sudo"
-  copy: src=./files/elasticsearch dest=/etc/default/elasticsearch
+  copy: src=./files/jvm.options dest=/etc/elasticsearch/jvm.options
 
 - name: reload systemctl
   become: True
