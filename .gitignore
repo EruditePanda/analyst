@@ -5,3 +5,5 @@ data-stream.log
 *.log
 *.retry
 production
+.tfstate
+.backup
