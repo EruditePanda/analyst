@@ -7,14 +7,14 @@ data "scaleway_image" "ubuntu" {
   name         = "Ubuntu Xenial"
 }
 
-resource "scaleway_server" "test" {
-  name  = "test"
+resource "scaleway_server" "analyst" {
+  name  = "analyst"
   image = "${data.scaleway_image.ubuntu.id}"
   type  = "VC1S"
 }
 
 resource "scaleway_ip" "ip" {
-  server = "${scaleway_server.test.id}"
+  server = "${scaleway_server.analyst.id}"
 }
 
 resource "scaleway_security_group" "http" {
@@ -40,4 +40,8 @@ resource "scaleway_security_group_rule" "https_accept" {
   ip_range  = "0.0.0.0/0"
   protocol  = "TCP"
   port      = 443
+}
+
+output "ip" {
+  value = "${scaleway_ip.ip.ip}"
 }
