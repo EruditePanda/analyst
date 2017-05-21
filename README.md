@@ -1,11 +1,11 @@
-#Small experimental repo (with simple app & devops)
+# Small experimental repo (with simple app & devops)
 
-##Prerequistes
+## Prerequistes
 To be able deploy the app you need to install the following tools:
   - Ansible
   - Terraform
 
-##Deploy
+## Deploy
 I use Terraform and ScaleWay provider to create server and provision all the software.
 You need to add to .zshrc (or similar) file the following:
 ```
