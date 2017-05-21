@@ -12,3 +12,8 @@
   become: True
   become_method: "sudo"
   apt: name=httpie
+
+- name: install jq
+  become: True
+  become_method: "sudo"
+  apt: name=jq
