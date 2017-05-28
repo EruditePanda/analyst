@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "abtv",
+  "license": "MIT",
+  "dependencies": {
+    "elasticsearch": "^13.0.1",
+    "express": "^4.15.3"
+  }
+}
