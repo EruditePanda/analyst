@@ -1,0 +1,12 @@
+[Unit]
+Description=api app
+
+[Service]
+User=root
+WorkingDirectory=/opt/api/
+ExecStart=/usr/bin/node /opt/api/index.js
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
