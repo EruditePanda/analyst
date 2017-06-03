@@ -35,8 +35,9 @@ const dailyHandler = (req, res) => {
       res.send(result)
     })
     .catch(err => {
+      console.error(`Api error during loading daily news: ${err}`)
       res.status(404)
-      res.send({error: 'Looks like we don\'t have anything now for your request'})
+      res.send('')
     })
 }
 
