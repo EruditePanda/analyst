@@ -63,21 +63,28 @@ const createSettings = () => {
   }
 }
 
-const hitsToTweets = hits => {
-  const regex = /(#.*){0,4}/g
+const getUsefulTweets = hits => {
+  const regex = /(#.*){4,}/g
   return hits
     .map(x => x._source.text)
-    .filter(x => x.match(regex))
+    .filter(x => !x.match(regex))
 }
 
 const searchTweets = (client, settings) => {
+  //TODO use cursor here
   return client.search({
     index: 'tweets',
     type: 'tweet',
     body: createElasticQuery(settings)
-  }).then(resp => ({query: settings.query,
-                    tweets: hitsToTweets(resp.hits.hits)}),
-          err => console.error('Error occured:' + err))
+  }).then(resp => {
+    const hits = resp.hits.hits
+    const usefulTweets = getUsefulTweets(hits)
+    return {query: settings.query,
+            tweets: usefulTweets,
+            totalCount: hits.length,
+            usefulCount: usefulTweets.length}
+    },
+    err => console.error('Error occured:' + err))
 }
 
 const dailyImportantTweets = (client, settings, query) => {
