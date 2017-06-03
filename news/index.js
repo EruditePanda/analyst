@@ -52,10 +52,24 @@ const createElasticQuery = ({query, from, to}) => ({
 })
 
 const createSettings = () => {
-  const from = new Date()
-  const to = new Date()
-  from.setDate(to.getDate() - 1)
-  const date = to.toISOString().substr(0,10)
+  //TODO write unit tests for this
+  //TODO modify settings in such a way that we calc only one day tweets
+  const current = new Date()
+  let from = new Date()
+  let to = new Date()
+  let date = ''
+
+  if (current.getUTCHours() == 0) {
+    //calc for the whole previous day and save it for the previous day
+    from.setDate(to.getUTCDate() - 1)
+    from.setHours(0,0,0,0)
+    to.setHours(0,0,0,0)
+    date = from.toISOString().substr(0,10)
+  } else {
+    //calc it for the current day (until the moment)
+    from.setHours(0,0,0,0)
+    date = to.toISOString().substr(0,10)
+  }
   return {
     from,
     to,
@@ -140,4 +154,9 @@ const topics = [{topic: 'javascript',
 const settings = createSettings()
 const client = elasticsearch.Client({host: 'localhost:9200'})
 
-run(client, settings, topics)
+//run(client, settings, topics)
+console.log(settings)
+console.log((new Date()).getDate())
+var d = new Date();
+d.setHours(0,0,0,0);
+console.log(d)
