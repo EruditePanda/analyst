@@ -2,7 +2,7 @@
   hosts: webservers
   roles:
     - role: common
-    - role: java
-    - role: elasticsearch
+    #- role: java
+    #- role: elasticsearch
     - role: nodejs
-    - role: app
+    - role: data-stream
