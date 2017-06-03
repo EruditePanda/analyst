@@ -5,7 +5,7 @@ const elasticsearch = require('elasticsearch')
 const app = express()
 http.createServer(app).listen(3000)
 
-const loadNews = (type, id) => {
+const loadNews = (client, type, id) => {
   return new Promise((resolve, reject) => {
     client.get({
       index: 'news',
@@ -18,21 +18,14 @@ const loadNews = (type, id) => {
         resolve(data)
       }
     })
-  }
+  })
 }
 
 const dailyHandler = (req, res) => {
   const currentDate = (new Date()).toISOString().substr(0,10)
   const client = elasticsearch.Client({host: 'localhost:9200'})
-  client.get({
-    index: 'news',
-    type: 'daily',
-    id: currentDate
-  }, (err, data) => {
-    if (err) {
-      res.status(404)
-      res.send('Looks like we don\'t have anything now for your request')
-    } else {
+  loadNews(client, 'daily', currentDate)
+    .then(data => {
       //TODO refactor the name to data
       const result = data._source.tweets
         .map(x => ({
@@ -40,10 +33,13 @@ const dailyHandler = (req, res) => {
           data: x.data.tweets
         }))
       res.send(result)
-    }
-  })
+    })
+    .catch(err => {
+      res.status(404)
+      res.send({error: 'Looks like we don\'t have anything now for your request'})
+    })
 }
 
 app.get('/daily', dailyHandler)
-app.get('/weekly', dailyHandler)
-app.get('/monthly', dailyHandler)
+//app.get('/weekly', weeklyHandler)
+//app.get('/monthly', monthlyHandler)
