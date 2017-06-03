@@ -1,129 +1,10 @@
 const elasticsearch = require('elasticsearch')
-
-const counter = (acc, x) => {
-  const v = acc[x] || 0
-  acc[x] = v + 1
-  return acc
-}
-
-const importantTweets = (tweets) => {
-  const MAX_TWEETS = 10
-  const MIN_RETWEETS = 2
-  const keys = []
-  tweets = tweets
-    .sort()
-    .reduce(counter, {})
-  for (tweet in tweets){
-    keys.push(tweet)
-  }
-  keys.sort((x,y) => tweets[y] - tweets[x])
-  return keys
-    .map(x => ({
-      text: x,
-      count: tweets[x]
-    }))
-    .filter(x => x.count >= MIN_RETWEETS)
-    .slice(0, MAX_TWEETS)
-}
-
-const createElasticQuery = ({query, from, to}) => ({
-  query: {
-    bool: {
-      must: {
-        match: {
-          text: {
-            query: query,
-            operator: 'and'
-          }
-        }
-      },
-      filter: {
-        range: {
-          created_at: {
-            gte: from,
-            lte: to
-          }
-        }
-      }
-    }
-  },
-  size: 10000,
-  sort: {created_at: 'desc'}
-})
-
-const createSettings = () => {
-  //TODO write unit tests for this
-  //TODO modify settings in such a way that we calc only one day tweets
-  const current = new Date()
-  let from = new Date()
-  let to = new Date()
-  let date = ''
-
-  if (current.getUTCHours() == 0) {
-    //calc for the whole previous day and save it for the previous day
-    from.setDate(to.getUTCDate() - 1)
-    from.setHours(0,0,0,0)
-    to.setHours(0,0,0,0)
-    date = from.toISOString().substr(0,10)
-  } else {
-    //calc it for the current day (until the moment)
-    from.setHours(0,0,0,0)
-    date = to.toISOString().substr(0,10)
-  }
-  return {
-    from,
-    to,
-    date
-  }
-}
-
-const getUsefulTweets = hits => {
-  const regex = /(#.*){4,}/g
-  return hits
-    .map(x => x._source.text)
-    .filter(x => !x.match(regex))
-}
-
-const searchTweets = (client, settings) => {
-  //TODO use cursor here
-  return client.search({
-    index: 'tweets',
-    type: 'tweet',
-    body: createElasticQuery(settings)
-  }).then(resp => {
-    const hits = resp.hits.hits
-    const usefulTweets = getUsefulTweets(hits)
-    return {query: settings.query,
-            tweets: usefulTweets,
-            totalCount: hits.length,
-            usefulCount: usefulTweets.length}
-    },
-    err => console.error('Error occured:' + err))
-}
+const {searchTweets, saveDailyNews} = require('./elastic')
+const {importantTweets, createSettings} = require('./twitter')
 
 const dailyImportantTweets = (client, settings, query) => {
   return searchTweets(client, Object.assign(settings, {query: query}))
     .then(x => Object.assign({}, x, {tweets: importantTweets(x.tweets)}))
-}
-
-const saveDailyNews = (client, date, news) => {
-  return new Promise((resolve, reject) => {
-    console.log(`Saving daily news ${JSON.stringify(news, null, 2)}`)
-    client.index({
-      index: 'news',
-      type: 'daily',
-      id: date,
-      body: news
-    }, (err, resp) => {
-      if (err) {
-        console.error(`Failed to save daily news ${err}`)
-        reject(err)
-      } else {
-        console.log(`Daily news was saved ${JSON.stringify(resp, null, 2)}`)
-        resolve(resp)
-      }
-    })
-  })
 }
 
 const run = (client, settings, topics) => {
@@ -151,12 +32,7 @@ const topics = [{topic: 'javascript',
                  query: 'clojure'},
                 {topic: 'golang',
                  query: 'golang'}]
-const settings = createSettings()
-const client = elasticsearch.Client({host: 'localhost:9200'})
+const settings = createSettings(new Date())
+const client = elasticsearch.Client({host: 'http://localhost:9200'})
 
-//run(client, settings, topics)
-console.log(settings)
-console.log((new Date()).getDate())
-var d = new Date();
-d.setHours(0,0,0,0);
-console.log(d)
+run(client, settings, topics)
