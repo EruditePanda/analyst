@@ -22,7 +22,7 @@ const createElasticQuery = ({query, from, to}) => ({
     }
   },
   size: 10000,
-  sort: {created_at: 'desc'}
+  sort: {createdAt: 'desc'}
 })
 
 exports.searchTweets = (client, settings) => {

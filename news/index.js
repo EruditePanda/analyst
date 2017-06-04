@@ -4,7 +4,12 @@ const {importantTweets, createSettings} = require('./twitter')
 
 const dailyImportantTweets = (client, settings, query) => {
   return searchTweets(client, Object.assign(settings, {query: query}))
-    .then(x => Object.assign({}, x, {tweets: importantTweets(x.tweets)}))
+    .then(x => ({
+      totalCount: x.totalCount,
+      usefulCount: x.usefulCount,
+      query: x.query,
+      news: importantTweets(x.tweets)
+    }))
 }
 
 const run = (client, settings, topics) => {
@@ -18,10 +23,10 @@ const run = (client, settings, topics) => {
         })
     })
   }, Promise.resolve([]))
-  .then(results => ({
+  .then(data => ({
     from: settings.from,
     to: settings.to,
-    tweets: results
+    data
   }))
   .then(news => saveDailyNews(client, settings.date, news))
   .catch(err => {

@@ -21,16 +21,15 @@ const loadNews = (client, type, id) => {
   })
 }
 
-const dailyHandler = (req, res) => {
+const dailyNews = (req, res) => {
   const currentDate = (new Date()).toISOString().substr(0,10)
   const client = elasticsearch.Client({host: 'localhost:9200'})
   loadNews(client, 'daily', currentDate)
-    .then(data => {
-      //TODO refactor the name to data
-      const result = data._source.tweets
+    .then(r => {
+      const result = r._source.data
         .map(x => ({
           topic: x.topic,
-          data: x.data.tweets
+          data: x.data.news
         }))
       res.send(result)
     })
@@ -41,6 +40,6 @@ const dailyHandler = (req, res) => {
     })
 }
 
-app.get('/daily', dailyHandler)
+app.get('/daily', dailyNews)
 //app.get('/weekly', weeklyHandler)
 //app.get('/monthly', monthlyHandler)
