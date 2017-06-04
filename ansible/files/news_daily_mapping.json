@@ -1,0 +1,33 @@
+{
+    "properties": {
+        "from": {
+            "type": "date"
+        },
+        "to": {
+            "type": "date"
+        },
+        "data": {
+            "properties": {
+                "totalCount": {
+                    "type": "long"
+                },
+                "usefulCount": {
+                    "type": "long"
+                },
+                "query": {
+                    "type": "text"
+                },
+                "news": {
+                    "properties": {
+                        "count": {
+                            "type": "long"
+                        },
+                        "text": {
+                            "type": "text"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

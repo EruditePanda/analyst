@@ -45,5 +45,11 @@
 - name: copy tweet_mapping.json
   copy: src=./files/tweet_mapping.json dest=/tmp/tweet_mapping.json
 
+- name: copy news_index.json
+  copy: src=./files/news_index.json dest=/tmp/news_index.json
+
+- name: copy news_daily_mapping.json
+  copy: src=./files/news_daily_mapping.json dest=/tmp/news_daily_mapping.json
+
 - name: create ElasticSearch indices
   command: /bin/sh /tmp/elasticsearch_indices.sh
