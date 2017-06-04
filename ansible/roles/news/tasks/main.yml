@@ -1,0 +1,24 @@
+- name: copy package.json
+  become: True
+  become_method: "sudo"
+  copy: src=../news/package.json dest=/opt/news/
+
+- name: copy index.js
+  become: True
+  become_method: "sudo"
+  copy: src=../news/index.js dest=/opt/news/
+
+- name: copy elastic.js
+  become: True
+  become_method: "sudo"
+  copy: src=../news/elastic.js dest=/opt/news/
+
+- name: copy twitter.js
+  become: True
+  become_method: "sudo"
+  copy: src=../news/twitter.js dest=/opt/news/
+
+- name: install node modules
+  become: True
+  become_method: "sudo"
+  command: npm install --prefix /opt/news

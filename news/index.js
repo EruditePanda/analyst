@@ -24,15 +24,25 @@ const run = (client, settings, topics) => {
     tweets: results
   }))
   .then(news => saveDailyNews(client, settings.date, news))
+  .catch(err => {
+    console.error(`Error occured: ${err}`)
+    process.exit(1)
+  })
 }
 
-const topics = [{topic: 'javascript',
-                 query: 'javascript'},
-                {topic: 'clojure',
-                 query: 'clojure'},
-                {topic: 'golang',
-                 query: 'golang'}]
-const settings = createSettings(new Date())
-const client = elasticsearch.Client({host: 'http://localhost:9200'})
+try {
+  const topics = [{topic: 'javascript',
+                   query: 'javascript'},
+                  {topic: 'clojure',
+                   query: 'clojure'},
+                  {topic: 'golang',
+                   query: 'golang'}]
+  const settings = createSettings(new Date())
+  const client = elasticsearch.Client({host: 'http://localhost:9200'})
 
-run(client, settings, topics)
+  run(client, settings, topics)
+}
+catch(err) {
+  console.error(`Error occured: ${err}`)
+  process.exit(1)
+}

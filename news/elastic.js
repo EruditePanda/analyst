@@ -31,15 +31,17 @@ exports.searchTweets = (client, settings) => {
     index: 'tweets',
     type: 'tweet',
     body: createElasticQuery(settings)
-  }).then(resp => {
+  })
+  .then(resp => {
     const hits = resp.hits.hits
     const tweets = usefulTweets(hits)
     return {query: settings.query,
             tweets: tweets,
             totalCount: hits.length,
             usefulCount: tweets.length}
-  },
-          err => console.error('Error occured:' + err))
+  }, err => {
+    throw err
+  })
 }
 
 exports.saveDailyNews = (client, date, news) => {
