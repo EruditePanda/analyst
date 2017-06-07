@@ -22,3 +22,11 @@
   become: True
   become_method: "sudo"
   command: npm install --prefix /opt/news
+
+- name: prepare daily news every hour
+  become: True
+  become_method: "sudo"
+  cron:
+    name: "prepare daily news"
+    minute: "30"
+    job: "/usr/bin/node /opt/news/index.js"
