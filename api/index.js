@@ -1,8 +1,10 @@
 const express = require('express')
 const http = require('http')
 const elasticsearch = require('elasticsearch')
+const cors = require('cors')
 
 const app = express()
+app.use(cors())
 http.createServer(app).listen(3000)
 
 const loadNews = (client, type, id) => {
