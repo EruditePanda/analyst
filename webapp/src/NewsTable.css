@@ -1,0 +1,14 @@
+.News-table {
+  text-align: center;
+  margin: auto;
+  max-width: 800px;
+  padding: 12px;
+}
+
+.News-header {
+  text-align: left;
+}
+
+.News-row {
+  text-align: left;
+}
