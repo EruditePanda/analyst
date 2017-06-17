@@ -26,12 +26,10 @@ class App extends Component {
            news: []}
 
   onTopicChange = (newTopic) => {
-    if (newTopic) {
     this.setState((state, props) => {
       state.topic = newTopic
       return state
     })
-    }
   }
   componentDidMount = () => {
     const dailyNewsUrl = 'http://51.15.47.25:3000/daily'

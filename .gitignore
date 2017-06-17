@@ -1,3 +1,6 @@
+# Github pages repo
+4news.github.io
+
 # Backend
 node_modules/
 .env
@@ -20,7 +23,7 @@ terraform_inventory.tmp
 /coverage
 
 # production
-/build
+/webapp/build
 
 # misc
 .DS_Store
