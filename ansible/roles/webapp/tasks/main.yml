@@ -1,0 +1,34 @@
+- name: Install nginx
+  tags: webapp
+  become: True
+  become_method: "sudo"
+  apt: name=nginx state=latest
+
+- name: Delete old site
+  tags: webapp
+  become: True
+  become_method: "sudo"
+  file: path=/var/www/html state=absent
+
+- name: Create build/static/js directory
+  tags: webapp
+  become: True
+  become_method: "sudo"
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /var/www/build/static/js
+    - /var/www/build/static/css
+
+- name: Deploy webapp
+  tags: webapp
+  become: True
+  become_method: "sudo"
+  copy: src=../webapp/build dest=/var/www directory_mode=yes
+
+- name: Enable site
+  tags: webapp
+  become: True
+  become_method: "sudo"
+  command: mv /var/www/build /var/www/html

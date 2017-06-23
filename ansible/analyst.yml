@@ -8,3 +8,4 @@
     - role: data-stream
     - role: api
     - role: news
+    - role: webapp
