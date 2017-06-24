@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import './App.css'
 import NewsTable from './NewsTable'
 import TopicMenu from './TopicMenu'
+import Header from './Header'
 
-const Header = () => (
-  <header className='App-header'>
-    <h2>Programming news</h2>
-  </header>
+const Footer = () => (
+  <footer className='App-header'>
+    <a href='/about'>About the site</a>
+  </footer>
 )
 
 const loadNews = (dailyNewsUrl) => {
@@ -53,6 +54,7 @@ class App extends Component {
       .catch(err => console.error(err))
   }
   render() {
+    console.log(this.props.location)
     const news = this.state.news[this.state.topic]
     const content = this.state.status === 'fetching' ?
       <h4>Loading news...</h4> :
@@ -63,6 +65,7 @@ class App extends Component {
         <Header />
         <TopicMenu onTopicChange={this.onTopicChange} />
         {content}
+        <Footer />
       </div>
     )
   }
