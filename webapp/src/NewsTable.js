@@ -2,13 +2,28 @@ import React, { Component } from 'react'
 import './NewsTable.css'
 import PropTypes from 'prop-types'
 
+class TextElement extends Component {
+  render() {
+    const text = `${this.props.text} `
+    if (text.startsWith('https://t.co/')) {
+      return (<a href={text} target='_blank' rel='noopener noreferrer'>{text}</a>)
+    } else {
+      return (<span>{text}</span>)
+    }
+  }
+}
+
 class NewsRow extends Component {
   render() {
     const {text, count} = this.props
+    const texts = (text.match(/\S+/g) || [])
+      .map((text, index) => <TextElement key={`${text} ${index}`} text={text}/>)
     return (
       <tr className="News-row">
         <td>
-          {text}
+          <div>
+            {texts}
+          </div>
         </td>
         <td>
           {count}
