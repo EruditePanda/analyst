@@ -54,7 +54,6 @@ class App extends Component {
       .catch(err => console.error(err))
   }
   render() {
-    console.log(this.props.location)
     const news = this.state.news[this.state.topic]
     const content = this.state.status === 'fetching' ?
       <h4>Loading news...</h4> :
@@ -63,7 +62,7 @@ class App extends Component {
     return (
       <div className="App"> 
         <Header />
-        <TopicMenu onTopicChange={this.onTopicChange} />
+        <TopicMenu onTopicChange={this.onTopicChange} selectedTopic={this.state.topic}/>
         {content}
         <Footer />
       </div>

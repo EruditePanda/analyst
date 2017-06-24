@@ -7,23 +7,32 @@ class MenuItem extends Component {
     onTopicChange(topic)
   }
   render() {
-    const {topic, text} = this.props
-    const href = `#${topic}`
+    const {text, selected} = this.props
+    const className = selected ? 'Topic-menu-item-selected' : 'Topic-menu-item'
     return (
-      <a className='Topic-item' href={href} onClick={this.onClick}>{text}</a>
+      <button className={className} onClick={this.onClick}>{text}</button>
     )
   }
 }
 
-
 class TopicMenu extends Component {
+  data = [
+    {text: 'JavaScript', topic: 'javascript'},
+    {text: 'Golang', topic: 'golang'},
+    {text: 'Clojure', topic: 'clojure'}
+  ]
   render() {
-    const {onTopicChange} = this.props
+    const {selectedTopic, onTopicChange} = this.props
+    const menuItems = this.data.map(({text, topic}) => 
+      <MenuItem key={topic} 
+                text={text} 
+                topic={topic} 
+                onTopicChange={onTopicChange} 
+                selected={topic === selectedTopic}/>)
+
     return (
       <nav className='Topic-menu'>
-        <MenuItem text='JavaScript' topic='javascript' onTopicChange={onTopicChange}/>
-        <MenuItem text='Golang' topic='golang' onTopicChange={onTopicChange}/>
-        <MenuItem text='Clojure' topic='clojure' onTopicChange={onTopicChange}/>
+        {menuItems}
       </nav>
     )
   }
