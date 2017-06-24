@@ -5,7 +5,7 @@ import TopicMenu from './TopicMenu'
 
 const Header = () => (
   <header className='App-header'>
-    <h2>4news</h2>
+    <h2>Programming news</h2>
   </header>
 )
 
