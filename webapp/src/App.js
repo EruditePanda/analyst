@@ -23,7 +23,9 @@ const loadNews = (dailyNewsUrl) => {
 
 class App extends Component {
   state = {topic: 'javascript',
-           news: []}
+           news: [],
+           status: 'fetching'
+  }
 
   onTopicChange = (newTopic) => {
     this.setState((state, props) => {
@@ -43,18 +45,24 @@ class App extends Component {
           state.news = news 
           return state
         })
+        setTimeout(() => this.setState((state, props) => {
+          state.status = 'loaded'
+          return state
+        }), 500)
       })
       .catch(err => console.error(err))
   }
   render() {
     const news = this.state.news[this.state.topic]
+    const content = this.state.status === 'fetching' ?
+      <h4>Loading news...</h4> :
+      <article><NewsTable news={news} /></article>
+
     return (
       <div className="App"> 
         <Header />
         <TopicMenu onTopicChange={this.onTopicChange} />
-        <article>
-          <NewsTable news={news} />
-        </article>
+        {content}
       </div>
     )
   }
