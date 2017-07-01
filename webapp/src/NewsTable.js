@@ -50,10 +50,8 @@ class NewsTable extends Component {
     )
   }
   render() {
-    const news = this.props.news || []
-    const newsItems = news.map(({text, count}) => 
-      <NewsRow key={text} text={text} count={count} />
-    )
+    const dailyItems = this.createItems(this.props.news.daily)
+    const weeklyItems = this.createItems(this.props.news.weekly)
     return (
       <div className='News-table'>
         <table className='News-table'>
@@ -65,11 +63,11 @@ class NewsTable extends Component {
             <tr>
               <td className='News-row-header' colSpan={2}>Weekly</td>
             </tr>
-            {newsItems}
+            {weeklyItems}
             <tr>
               <td className='News-row-header' colSpan={2}>Daily</td>
             </tr>
-            {newsItems}
+            {dailyItems}
           </tbody>
         </table>
       </div>

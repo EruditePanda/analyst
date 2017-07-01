@@ -36,6 +36,10 @@ const getNews = (type, req, res) => {
             .sort((x,y) => y.count - x.count)
             .slice(0, MAX_RECORDS)
         }))
+        .reduce((acc, {topic, data}) => {
+          acc[topic] = data
+          return acc
+        }, {})
       res.send(result)
     })
     .catch(err => {

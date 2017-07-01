@@ -24,7 +24,9 @@ const loadNews = (dailyNewsUrl) => {
 
 class App extends Component {
   state = {topic: 'javascript',
-           news: {},
+           news: {'javascript': {},
+                  'golang': {},
+                  'clojure': {}},
            status: 'fetching'
   }
 
