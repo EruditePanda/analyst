@@ -50,22 +50,61 @@ exports.searchTweets = (client, settings) => {
   })
 }
 
-exports.saveDailyNews = (client, date, news) => {
+exports.saveNews = (client, type, date, news) => {
   return new Promise((resolve, reject) => {
-    console.log(`Saving daily news ${JSON.stringify(news, null, 2)}`)
+    console.log(`Saving ${type} news ${JSON.stringify(news, null, 2)}`)
     client.index({
       index: 'news',
-      type: 'daily',
+      type: type,
       id: date,
       body: news
     }, (err, resp) => {
       if (err) {
-        console.error(`Failed to save daily news ${err}`)
+        console.error(`Failed to save ${type} news ${err}`)
         reject(err)
       } else {
-        console.log(`Daily news was saved ${JSON.stringify(resp, null, 2)}`)
+        console.log(`${type} news was saved ${JSON.stringify(resp, null, 2)}`)
         resolve(resp)
       }
     })
   })
+}
+
+exports.weeklyDailyNews = (client) => {
+  const to = new Date()
+  const from = new Date()
+  from.setDate(to.getDate() - 7)
+  return client.search({
+    index: 'news',
+    type: 'daily',
+    body: {
+      query: {
+        bool: {
+          filter: [
+            {
+              range: {
+                from: {
+                  gte: from,
+                  lte: to
+                }
+              }
+            },
+            {
+              range: {
+                to: {
+                  gte: from,
+                  lte: to
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  })
+  .then(
+    resp => resp.hits.hits.map(x => x._source.data),
+    err => {
+      throw err
+    })
 }

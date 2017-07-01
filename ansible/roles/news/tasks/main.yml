@@ -28,11 +28,11 @@
   command: npm install --prefix /opt/news
   tags: news
 
-- name: prepare daily news every hour
+- name: prepare daily & weekly news every hour
   become: True
   become_method: "sudo"
   cron:
     name: "prepare daily news"
     minute: "30"
-    job: "/usr/bin/node /opt/news/index.js"
+    job: "/usr/bin/node /opt/news/index.js --daily --weekly >> /var/log/news_cron.log"
   tags: news

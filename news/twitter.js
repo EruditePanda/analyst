@@ -47,7 +47,7 @@ exports.importantTweets = (tweets) => {
     .slice(0, MAX_RECORDS)
 }
 
-const removeRetweet = (text) => {
+exports.removeRetweet = (text) => {
   const match = text.match(/^RT\s@[^\s]+\s/)
   if (match) {
     const prefix = match[0]
@@ -64,6 +64,6 @@ const removeRetweet = (text) => {
 exports.usefulTweets = hits => {
   const regex = /(#.*){4,}/g
   return hits
-    .map(x => removeRetweet(x._source.text))
+    .map(x => exports.removeRetweet(x._source.text))
     .filter(x => !x.match(regex))
 }
