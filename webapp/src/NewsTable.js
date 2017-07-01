@@ -44,6 +44,11 @@ NewsRow.propTypes = {
 }
 
 class NewsTable extends Component {
+  createItems = (news) => {
+    const newsItems = (news || []).map(({text, count}) => 
+      <NewsRow key={text} text={text} count={count} />
+    )
+  }
   render() {
     const news = this.props.news || []
     const newsItems = news.map(({text, count}) => 
@@ -57,6 +62,10 @@ class NewsTable extends Component {
               <th className='News-header'>Text</th>
               <th className='News-header'>Stars</th>
             </tr>
+            <tr>
+              <td className='News-row-header' colSpan={2}>Weekly</td>
+            </tr>
+            {newsItems}
             <tr>
               <td className='News-row-header' colSpan={2}>Daily</td>
             </tr>

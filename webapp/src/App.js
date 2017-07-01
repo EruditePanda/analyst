@@ -24,7 +24,7 @@ const loadNews = (dailyNewsUrl) => {
 
 class App extends Component {
   state = {topic: 'javascript',
-           news: [],
+           news: {},
            status: 'fetching'
   }
 
@@ -43,7 +43,7 @@ class App extends Component {
           return acc
         }, {})
         this.setState((state, props) => {
-          state.news = news 
+          state.news.daily = news 
           return state
         })
         setTimeout(() => this.setState((state, props) => {
