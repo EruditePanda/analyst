@@ -22,7 +22,7 @@
   become_method: "sudo"
   file: path=/var/www/html state=absent
 
-- name: Create build/static/js directory
+- name: Create build/static/ directory
   tags: webapp
   become: True
   become_method: "sudo"

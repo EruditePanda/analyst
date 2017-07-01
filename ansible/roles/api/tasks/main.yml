@@ -2,33 +2,40 @@
   become: True
   become_method: "sudo"
   copy: src=../api/package.json dest=/opt/api/
+  tags: api
 
 - name: copy index.js
   become: True
   become_method: "sudo"
   copy: src=../api/index.js dest=/opt/api/
+  tags: api
 
 - name: install node modules
   become: True
   become_method: "sudo"
   command: npm install --prefix /opt/api
+  tags: api
 
 - name: copy api.service
   become: True
   become_method: "sudo"
   copy: src=./files/api.service dest=/etc/systemd/system/api.service
+  tags: api
 
 - name: reload systemctl
   become: True
   become_method: "sudo"
   command: systemctl daemon-reload
+  tags: api
 
 - name: enable api.service
   become: True
   become_method: "sudo"
   service: name=api.service enabled=yes
+  tags: api
 
 - name: restart api.service
   become: True
   become_method: "sudo"
   service: name=api.service state=restarted
+  tags: api

@@ -2,26 +2,31 @@
   become: True
   become_method: "sudo"
   copy: src=../news/package.json dest=/opt/news/
+  tags: news
 
 - name: copy index.js
   become: True
   become_method: "sudo"
   copy: src=../news/index.js dest=/opt/news/
+  tags: news
 
 - name: copy elastic.js
   become: True
   become_method: "sudo"
   copy: src=../news/elastic.js dest=/opt/news/
+  tags: news
 
 - name: copy twitter.js
   become: True
   become_method: "sudo"
   copy: src=../news/twitter.js dest=/opt/news/
+  tags: news
 
 - name: install node modules
   become: True
   become_method: "sudo"
   command: npm install --prefix /opt/news
+  tags: news
 
 - name: prepare daily news every hour
   become: True
@@ -30,3 +35,4 @@
     name: "prepare daily news"
     minute: "30"
     job: "/usr/bin/node /opt/news/index.js"
+  tags: news

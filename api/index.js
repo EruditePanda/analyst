@@ -23,15 +23,18 @@ const loadNews = (client, type, id) => {
   })
 }
 
-const dailyNews = (req, res) => {
+const getNews = (type, req, res) => {
   const currentDate = (new Date()).toISOString().substr(0,10)
   const client = elasticsearch.Client({host: 'localhost:9200'})
   loadNews(client, 'daily', currentDate)
     .then(r => {
+      const MAX_RECORDS = 10
       const result = r._source.data
         .map(x => ({
           topic: x.topic,
           data: x.data.news
+            .sort((x,y) => y.count - x.count)
+            .slice(0, MAX_RECORDS)
         }))
       res.send(result)
     })
@@ -42,6 +45,10 @@ const dailyNews = (req, res) => {
     })
 }
 
+const dailyNews = (req, res) => getNews('daily', req, res)
+const weeklyNews = (req, res) => getNews('weekly', req, res)
+const monthlyNews = (req, res) => getNews('monthly', req, res)
+
 app.get('/daily', dailyNews)
-//app.get('/weekly', weeklyHandler)
-//app.get('/monthly', monthlyHandler)
+app.get('/weekly', weeklyNews)
+app.get('/monthly', monthlyNews)

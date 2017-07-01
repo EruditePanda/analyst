@@ -6,9 +6,49 @@
 }
 
 .News-header {
-  text-align: left;
+  text-align: center;
 }
 
 .News-row {
   text-align: left;
+}
+
+.News-stars {
+  text-align: center;
+}
+
+.News-row-header {
+  text-align: center;
+}
+
+.Link {
+  display: inline;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid gray;
+}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+  padding: 4px;
+  text-align: center;
+}
+
+td {
+  padding: 3px;
+  text-align: left;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #eee;
+}
+
+tbody tr:hover {
+  background-color: #ddd
 }

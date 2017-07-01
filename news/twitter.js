@@ -28,7 +28,7 @@ const counter = (acc, x) => {
 }
 
 exports.importantTweets = (tweets) => {
-  const MAX_RECORDS = 10
+  const MAX_RECORDS = 20
   const MIN_RETWEETS = 2
   const keys = []
   tweets = tweets
@@ -47,9 +47,23 @@ exports.importantTweets = (tweets) => {
     .slice(0, MAX_RECORDS)
 }
 
+const removeRetweet = (text) => {
+  const match = text.match(/^RT\s@[^\s]+\s/)
+  if (match) {
+    const prefix = match[0]
+    if (prefix.length < text.length) {
+      return text.substring(prefix.length)
+    } else {
+      return text
+    }
+  } else {
+    return text
+  }
+}
+
 exports.usefulTweets = hits => {
   const regex = /(#.*){4,}/g
   return hits
-    .map(x => x._source.text)
+    .map(x => removeRetweet(x._source.text))
     .filter(x => !x.match(regex))
 }

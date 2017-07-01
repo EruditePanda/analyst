@@ -6,7 +6,12 @@ class TextElement extends Component {
   render() {
     const text = `${this.props.text} `
     if (text.startsWith('https://t.co/')) {
-      return (<a href={text} target='_blank' rel='noopener noreferrer'>{text}</a>)
+      return (
+        <div className='Link'>
+          <a href={text} target='_blank' rel='noopener noreferrer'>link</a>
+          <span> </span>
+        </div>
+      )
     } else {
       return (<span>{text}</span>)
     }
@@ -25,8 +30,8 @@ class NewsRow extends Component {
             {texts}
           </div>
         </td>
-        <td>
-          {count}
+        <td className='News-stars'>
+          <span>{count}</span>
         </td>
       </tr>
     )
@@ -49,8 +54,11 @@ class NewsTable extends Component {
         <table className='News-table'>
           <tbody>
             <tr>
-              <th className='News-header'>Topic</th>
-              <th className='News-header'>Retweets</th>
+              <th className='News-header'>Text</th>
+              <th className='News-header'>Stars</th>
+            </tr>
+            <tr>
+              <td className='News-row-header' colSpan={2}>Daily</td>
             </tr>
             {newsItems}
           </tbody>
