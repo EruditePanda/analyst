@@ -36,16 +36,12 @@ class App extends Component {
       return state
     })
   }
-  componentDidMount = () => {
-    const dailyNewsUrl = 'http://51.15.47.25:3000/daily'
-    loadNews(dailyNewsUrl)
+  initState = (type, url) => {
+    loadNews(url)
       .then(news => {
-        news = news.reduce((acc, {topic, data}) => {
-          acc[topic] = data
-          return acc
-        }, {})
         this.setState((state, props) => {
-          state.news.daily = news 
+          Object.keys(news)
+            .forEach(key => state.news[key][type] = news[key])
           return state
         })
         setTimeout(() => this.setState((state, props) => {
@@ -54,6 +50,10 @@ class App extends Component {
         }), 500)
       })
       .catch(err => console.error(err))
+  }
+  componentDidMount = () => {
+    this.initState('daily', 'http://51.15.47.25:3000/daily')
+    this.initState('weekly', 'http://51.15.47.25:3000/weekly')
   }
   render() {
     const news = this.state.news[this.state.topic]

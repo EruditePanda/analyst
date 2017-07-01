@@ -8,7 +8,7 @@ const createElasticQuery = ({query, from, to}) => ({
           text: {
             query: query,
             operator: 'and'
-          }
+          },
         }
       },
       filter: {
@@ -18,7 +18,13 @@ const createElasticQuery = ({query, from, to}) => ({
             lte: to
           }
         }
-      }
+      },
+      should: {
+        term: {
+          lang: 'en'
+        }
+      },
+      minimum_should_match: 1
     }
   },
   size: 10000,
