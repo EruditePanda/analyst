@@ -3,27 +3,25 @@ exports.createSettings = (current) => {
   let to = new Date(current)
   let date = ''
 
-  if (current.getUTCHours() == 0) {
+  if (current.getUTCHours() === 0) {
     //the whole previous day
     from.setUTCDate(to.getUTCDate() - 1)
-    from.setUTCHours(0,0,0,0)
-    to.setUTCHours(0,0,0,0)
-    date = from.toISOString().substr(0,10)
+    from.setUTCHours(0, 0, 0, 0)
+    to.setUTCHours(0, 0, 0, 0)
+    date = from.toISOString().substr(0, 10)
   } else {
     //the current day until the moment
-    from.setUTCHours(0,0,0,0)
-    date = to.toISOString().substr(0,10)
+    from.setUTCHours(0, 0, 0, 0)
+    date = to.toISOString().substr(0, 10)
   }
-  return {
-    from,
-    to,
-    date
-  }
+
+  return { from, to, date }
 }
 
 const counter = (acc, x) => {
   const v = acc[x] || 0
   acc[x] = v + 1
+
   return acc
 }
 
@@ -37,7 +35,8 @@ exports.importantTweets = (tweets) => {
   for (tweet in tweets){
     keys.push(tweet)
   }
-  keys.sort((x,y) => tweets[y] - tweets[x])
+  keys.sort((x, y) => tweets[y] - tweets[x])
+
   return keys
     .map(x => ({
       text: x,
@@ -63,6 +62,7 @@ exports.removeRetweet = (text) => {
 
 exports.usefulTweets = hits => {
   const regex = /(#.*){4,}/g
+
   return hits
     .map(x => exports.removeRetweet(x._source.text))
     .filter(x => !x.match(regex))
