@@ -3,7 +3,7 @@
 const request = require('request')
 const Twitter = require('twitter')
 const _ = require('lodash')
-const  settings = require('./settings.json')
+const settings = require('./settings.json')
 const Log = require('log')
 const fs = require('fs')
 
@@ -49,12 +49,12 @@ const isTweet = _.conforms({
 
 function saveTweetAsync(tweet) {
   let uri = settings.elasticSearchAddress
-  if (!uri.endsWith("/")){
-    uri += "/"
+  if (!uri.endsWith('/')) {
+    uri += '/'
   }
   request({
-    uri: uri + "tweets/tweet/" + tweet.id,
-    method: "PUT",
+    uri: uri + 'tweets/tweet/' + tweet.id,
+    method: 'PUT',
     timeout: 10000,
     followRedirect: false,
     maxRedirects: 10,
@@ -70,7 +70,7 @@ function saveTweetAsync(tweet) {
   })
 }
 
-const stream = client.stream('statuses/filter', {track: settings.twitterTrack})
+const stream = client.stream('statuses/filter', { track: settings.twitterTrack })
 stream.on('data', event => {
   if (isTweet(event)){
     const storedTweet = toStoredTweet(event)
