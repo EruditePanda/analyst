@@ -1,50 +1,40 @@
 const elasticsearch = require('elasticsearch')
-const {searchTweets, saveNews, weeklyDailyNews} = require('./elastic')
-const {importantTweets, createSettings, removeRetweet} = require('./twitter')
+const { searchTweets, saveNews, weeklyDailyNews } = require('./elastic')
+const { importantTweets, createSettings, removeRetweet } = require('./twitter')
 
-const dailyImportantTweets = (client, settings, query) => {
-  return searchTweets(client, Object.assign(settings, {query: query}))
+const dailyImportantTweets = (client, settings, query) =>
+  searchTweets(client, Object.assign(settings, { query }))
     .then(x => ({
       totalCount: x.totalCount,
       usefulCount: x.usefulCount,
       query: x.query,
       news: importantTweets(x.tweets)
     }))
-}
 
 const run = (client, settings, topics) => {
-  topics.reduce((p, {topic, query}) => {
-    return p.then(results => {
-      return dailyImportantTweets(client, settings, query)
+  topics.reduce((p, { topic, query }) =>
+    p.then(results =>
+      dailyImportantTweets(client, settings, query)
         .then(data => {
-          results.push({topic,
-                        data})
+          results.push({ topic, data })
           return results
-        })
+        })), Promise.resolve([]))
+    .then(data => ({ from: settings.from, to: settings.to, data }))
+    .then(news => saveNews(client, 'daily', settings.date, news))
+    .catch(err => {
+      console.error(`Error occured: ${err}`)
+      process.exit(1)
     })
-  }, Promise.resolve([]))
-  .then(data => ({
-    from: settings.from,
-    to: settings.to,
-    data
-  }))
-  .then(news => saveNews(client, 'daily', settings.date, news))
-  .catch(err => {
-    console.error(`Error occured: ${err}`)
-    process.exit(1)
-  })
 }
 
 const runDaily = () => {
   try {
-    const topics = [{topic: 'javascript',
-                     query: 'javascript'},
-                    {topic: 'clojure',
-                     query: 'clojure'},
-                    {topic: 'golang',
-                     query: 'golang'}]
+    const topics = [
+      { topic: 'javascript', query: 'javascript' },
+      { topic: 'clojure', query: 'clojure' },
+      { topic: 'golang', query: 'golang' }]
     const settings = createSettings(new Date())
-    const client = elasticsearch.Client({host: 'http://localhost:9200'})
+    const client = elasticsearch.Client({ host: 'http://localhost:9200' })
 
     run(client, settings, topics)
   }
@@ -56,7 +46,7 @@ const runDaily = () => {
 
 const reduceDaily = (acc, news) => {
   return news
-    .reduce((acc, {topic, data}) => {
+    .reduce((acc, { topic, data }) => {
       const accData = acc[topic] || []
       acc[topic] = accData.concat(data.news)
       return acc
@@ -66,26 +56,26 @@ const reduceDaily = (acc, news) => {
 const reduceCount = news => {
   const MAX_RECORDS = 10
   const dict = news
-    .reduce((acc, {text, count}) => {
+    .reduce((acc, { text, count }) => {
       const accCount = acc[text] || 0
       acc[text] = accCount + count
       return acc
     }, {})
   return Object.keys(dict)
-    .map(text => ({text: removeRetweet(text), count: dict[text]}))
+    .map(text => ({ text: removeRetweet(text), count: dict[text] }))
     .sort((x, y) => y.count - x.count)
     .slice(0, MAX_RECORDS)
 }
 
 const runMonthly = () => {
-  const client = elasticsearch.Client({host: 'http://localhost:9200'})
+  const client = elasticsearch.Client({ host: 'http://localhost:9200' })
   weeklyDailyNews(client)
     .then(news => {
       const allNews = news
         .reduce(reduceDaily, {})
       const weeklyNews = Object.keys(allNews)
-        .map(key => ({topic: key, news: reduceCount(allNews[key])}))
-        .reduce((acc, {topic, news}) => {
+        .map(key => ({ topic: key, news: reduceCount(allNews[key]) }))
+        .reduce((acc, { topic, news }) => {
           acc[topic] = news
           return acc
         }, {})

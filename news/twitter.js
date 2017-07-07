@@ -1,16 +1,16 @@
-exports.createSettings = (current) => {
-  let from = new Date(current)
-  let to = new Date(current)
+exports.createSettings = current => {
+  const from = new Date(current)
+  const to = new Date(current)
   let date = ''
 
   if (current.getUTCHours() === 0) {
-    //the whole previous day
+    // the whole previous day
     from.setUTCDate(to.getUTCDate() - 1)
     from.setUTCHours(0, 0, 0, 0)
     to.setUTCHours(0, 0, 0, 0)
     date = from.toISOString().substr(0, 10)
   } else {
-    //the current day until the moment
+    // the current day until the moment
     from.setUTCHours(0, 0, 0, 0)
     date = to.toISOString().substr(0, 10)
   }
@@ -25,7 +25,7 @@ const counter = (acc, x) => {
   return acc
 }
 
-exports.importantTweets = (tweets) => {
+exports.importantTweets = tweets => {
   const MAX_RECORDS = 20
   const MIN_RETWEETS = 2
   const keys = []
@@ -46,18 +46,16 @@ exports.importantTweets = (tweets) => {
     .slice(0, MAX_RECORDS)
 }
 
-exports.removeRetweet = (text) => {
+exports.removeRetweet = text => {
   const match = text.match(/^RT\s@[^\s]+\s/)
   if (match) {
     const prefix = match[0]
     if (prefix.length < text.length) {
       return text.substring(prefix.length)
-    } else {
-      return text
     }
-  } else {
     return text
   }
+  return text
 }
 
 exports.usefulTweets = hits => {
