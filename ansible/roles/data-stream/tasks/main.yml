@@ -2,43 +2,52 @@
   become: True
   become_method: "sudo"
   copy: src=../data-stream/package.json dest=/opt/data_stream/
+  tags: data-stream
 
 - name: copy index.js
   become: True
   become_method: "sudo"
   copy: src=../data-stream/index.js dest=/opt/data_stream/
+  tags: data-stream
 
 - name: copy settings.json
   become: True
   become_method: "sudo"
   copy: src=../data-stream/settings.json dest=/opt/data_stream/
+  tags: data-stream
 
 - name: copy .env
   become: True
   become_method: "sudo"
   copy: src=../data-stream/.env dest=/opt/data_stream/
+  tags: data-stream
 
 - name: install node modules
   become: True
   become_method: "sudo"
   command: npm install --prefix /opt/data_stream
+  tags: data-stream
 
 - name: copy data_stream.service
   become: True
   become_method: "sudo"
   copy: src=./files/data_stream.service dest=/etc/systemd/system/data_stream.service
+  tags: data-stream
 
 - name: reload systemctl
   become: True
   become_method: "sudo"
   command: systemctl daemon-reload
+  tags: data-stream
 
 - name: enable data_stream.service
   become: True
   become_method: "sudo"
   service: name=data_stream.service enabled=yes
+  tags: data-stream
 
 - name: restart data_stream.service
   become: True
   become_method: "sudo"
   service: name=data_stream.service state=restarted
+  tags: data-stream
