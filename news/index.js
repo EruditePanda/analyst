@@ -31,27 +31,28 @@ const runDaily = () => {
   try {
     const topics = [
       { topic: 'javascript', query: 'javascript' },
-      { topic: 'clojure', query: 'clojure' },
-      { topic: 'golang', query: 'golang' }]
+      { topic: 'clojure', query: 'clojure clojurescript' },
+      { topic: 'golang', query: 'golang' },
+      { topic: 'nosql', query: 'elasticsearch mongodb' },
+      { topic: 'devops', query: 'devops' }
+    ]
     const settings = createSettings(new Date())
     const client = elasticsearch.Client({ host: 'http://localhost:9200' })
 
     run(client, settings, topics)
-  }
-  catch(err) {
+  } catch (err) {
     console.error(`Error occured: ${err}`)
     process.exit(1)
   }
 }
 
-const reduceDaily = (acc, news) => {
-  return news
+const reduceDaily = (acc, news) =>
+  news
     .reduce((acc, { topic, data }) => {
       const accData = acc[topic] || []
       acc[topic] = accData.concat(data.news)
       return acc
     }, acc)
-}
 
 const reduceCount = news => {
   const MAX_RECORDS = 10
@@ -71,8 +72,7 @@ const runMonthly = () => {
   const client = elasticsearch.Client({ host: 'http://localhost:9200' })
   weeklyDailyNews(client)
     .then(news => {
-      const allNews = news
-        .reduce(reduceDaily, {})
+      const allNews = news.reduce(reduceDaily, {})
       const weeklyNews = Object.keys(allNews)
         .map(key => ({ topic: key, news: reduceCount(allNews[key]) }))
         .reduce((acc, { topic, news }) => {
