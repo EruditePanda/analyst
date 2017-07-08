@@ -3,6 +3,7 @@
   "rules": {
     "semi": ["error", "never"],
     "no-underscore-dangle": "off",
-    "arrow-parens": ["error", "as-needed"]
+    "arrow-parens": ["error", "as-needed"],
+    "no-console": "off"
   }
 }
