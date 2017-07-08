@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 const request = require('request')
 const Twitter = require('twitter')
@@ -8,6 +8,7 @@ const Log = require('log')
 const fs = require('fs')
 
 require('dotenv').config()
+
 const log = new Log('info', fs.createWriteStream(settings.logFileName))
 
 log.info('Starting data-stream')
@@ -21,11 +22,11 @@ const client = new Twitter({
 
 log.info('Twitter client was created')
 
-function twitterDateToJSDate(aDate){
+function twitterDateToJSDate(aDate) {
   return new Date(Date.parse(aDate.replace(/( \+)/, ' UTC$1')))
 }
 
-function toStoredTweet(tweet){
+function toStoredTweet(tweet) {
   return {
     id: tweet.id.toString(),
     created_at: twitterDateToJSDate(tweet.created_at),
@@ -42,10 +43,7 @@ function toStoredTweet(tweet){
   }
 }
 
-const isTweet = _.conforms({
-  id_str: _.isString,
-  text: _.isString,
-})
+const isTweet = _.conforms({ id_str: _.isString, text: _.isString })
 
 function saveTweetAsync(tweet) {
   let uri = settings.elasticSearchAddress
@@ -53,7 +51,7 @@ function saveTweetAsync(tweet) {
     uri += '/'
   }
   request({
-    uri: uri + 'tweets/tweet/' + tweet.id,
+    uri: `${uri}tweets/tweet/${tweet.id}`,
     method: 'PUT',
     timeout: 10000,
     followRedirect: false,
@@ -72,7 +70,7 @@ function saveTweetAsync(tweet) {
 
 const stream = client.stream('statuses/filter', { track: settings.twitterTrack })
 stream.on('data', event => {
-  if (isTweet(event)){
+  if (isTweet(event)) {
     const storedTweet = toStoredTweet(event)
     saveTweetAsync(storedTweet)
   }
