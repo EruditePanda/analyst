@@ -23,14 +23,19 @@ const loadNews = (dailyNewsUrl) => {
 }
 
 class App extends Component {
-  state = {topic: 'javascript',
-           news: {'javascript': {},
-                  'golang': {},
-                  'clojure': {}},
-           status: 'fetching'
+  state = {
+    topic: 'javascript',
+    news: {
+      'javascript': {},
+      'golang': {},
+      'clojure': {},
+      'nosql': {},
+      'devops': {}
+    },
+    status: 'fetching'
   }
 
-  onTopicChange = (newTopic) => {
+  onTopicChange = newTopic => {
     this.setState((state, props) => {
       state.topic = newTopic
       return state
@@ -49,7 +54,12 @@ class App extends Component {
           return state
         }), 500)
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        this.setState((state, props) => {
+          state.status = 'error'
+          return state
+        })
+      })
   }
   componentDidMount = () => {
     this.initState('daily', 'http://51.15.47.25:3000/daily')
@@ -57,12 +67,22 @@ class App extends Component {
   }
   render() {
     const news = this.state.news[this.state.topic]
-    const content = this.state.status === 'fetching' ?
-      <h4>Loading news...</h4> :
-      <article><NewsTable news={news} /></article>
+
+    let content = null
+    switch (this.state.status) {
+      case 'fetching':
+        content = <h4>Loading news...</h4>
+        break
+      case 'error':
+        content = <h4>Something went wrong. We are working on the problem. Try again later.</h4>
+        break
+      default:
+        content = <article><NewsTable news={news} /></article>
+        break
+    }
 
     return (
-      <div className="App"> 
+      <div className="App">
         <Header />
         <TopicMenu onTopicChange={this.onTopicChange} selectedTopic={this.state.topic}/>
         {content}

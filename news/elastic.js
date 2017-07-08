@@ -3,7 +3,7 @@ const { usefulTweets } = require('./twitter')
 const createTweetsQuery = ({ query, from, to }) => ({
   query: {
     bool: {
-      must: { match: { text: { query, operator: 'and' } } },
+      must: { match: { text: { query, operator: 'or' } } },
       filter: { range: { created_at: { gte: from, lte: to } } },
       should: { term: { lang: 'en' } },
       minimum_should_match: 1
