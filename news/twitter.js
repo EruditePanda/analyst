@@ -28,20 +28,14 @@ const counter = (acc, x) => {
 exports.importantTweets = tweets => {
   const MAX_RECORDS = 20
   const MIN_RETWEETS = 2
-  const keys = []
-  tweets = tweets
+  const tweetsCounters = tweets
     .sort()
     .reduce(counter, {})
-  for (tweet in tweets){
-    keys.push(tweet)
-  }
-  keys.sort((x, y) => tweets[y] - tweets[x])
+  const keys = Object.keys(tweetsCounters)
+  keys.sort((x, y) => tweetsCounters[y] - tweetsCounters[x])
 
   return keys
-    .map(x => ({
-      text: x,
-      count: tweets[x]
-    }))
+    .map(x => ({ text: x, count: tweetsCounters[x] }))
     .filter(x => x.count >= MIN_RETWEETS)
     .slice(0, MAX_RECORDS)
 }
