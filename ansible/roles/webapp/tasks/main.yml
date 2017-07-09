@@ -1,29 +1,28 @@
 - name: Install nginx
-  tags: webapp
   become: True
   become_method: "sudo"
   apt: name=nginx state=latest
+  tags: webapp
 
 - name: Copy nginx server config
-  tags: webapp
   become: True
   become_method: "sudo"
   copy: src=files/default_site dest=/etc/nginx/sites-available/default
+  tags: webapp
 
 - name: Reload nginx
-  tags: webapp
   become: True
   become_method: "sudo"
   service: name=nginx state=reloaded
+  tags: webapp
 
 - name: Delete old site
-  tags: webapp
   become: True
   become_method: "sudo"
   file: path=/var/www/html state=absent
+  tags: webapp
 
 - name: Create build/static/ directory
-  tags: webapp
   become: True
   become_method: "sudo"
   file:
@@ -32,15 +31,16 @@
   with_items:
     - /var/www/build/static/js
     - /var/www/build/static/css
+  tags: webapp
 
 - name: Deploy webapp
-  tags: webapp
   become: True
   become_method: "sudo"
   copy: src=../webapp/build dest=/var/www directory_mode=yes
+  tags: webapp
 
 - name: Enable site
-  tags: webapp
   become: True
   become_method: "sudo"
   command: mv /var/www/build /var/www/html
+  tags: webapp

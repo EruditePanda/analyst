@@ -5,7 +5,7 @@ const cors = require('cors')
 
 const app = express()
 app.use(cors())
-http.createServer(app).listen(3000)
+http.createServer(app).listen(3000, 'localhost')
 
 const getElasticNews = (client, type, id) => new Promise((resolve, reject) => {
   client.get({ index: 'news', type, id }, (err, data) => {

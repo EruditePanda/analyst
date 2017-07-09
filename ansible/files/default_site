@@ -20,6 +20,14 @@ server {
       try_files $uri =404;
     }
 
+    location /api/daily {
+      proxy_pass http://localhost:3000/daily;
+    }
+
+    location /api/weekly {
+      proxy_pass http://localhost:3000/weekly;
+    }
+
     # Any route that doesn't have a file extension (e.g. /devices)
     location / {
         try_files $uri $uri/ /index.html;
