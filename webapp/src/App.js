@@ -62,8 +62,8 @@ class App extends Component {
       })
   }
   componentDidMount = () => {
-    this.initState('daily', 'http://abtv.me/api/daily')
-    this.initState('weekly', 'http://abtv.me/api/weekly')
+    this.initState('daily', '/api/daily')
+    this.initState('weekly', '/api/weekly')
   }
   render() {
     const news = this.state.news[this.state.topic]
